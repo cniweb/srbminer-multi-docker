@@ -1,4 +1,4 @@
-FROM debian:buster-slim
+FROM debian:stable-slim
 RUN apt-get update && apt-get -y install wget xz-utils && \
     cd /opt && wget https://github.com/doktor83/SRBMiner-Multi/releases/download/1.0.2/SRBMiner-Multi-1-0-2-Linux.tar.xz && \
 	tar xf SRBMiner-Multi-1-0-2-Linux.tar.xz && rm -rf /opt/SRBMiner-Multi-1-0-2-Linux.tar.xz && \
