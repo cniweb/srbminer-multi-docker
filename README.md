@@ -1,2 +1,26 @@
 # srbminer-multi-docker
-Docker containing SRBMiner-Multi Miner
+
+High performance, open source CPU & AMD GPU Miner Docker Image.
+Mine up to 4 different algorithms/coins at the same time!
+
+[![Snyk Container](https://github.com/cniweb/cpuminer-opt-docker/actions/workflows/snyk-container-analysis.yml/badge.svg)](https://github.com/cniweb/srbminer-multi-docker/actions/workflows/snyk-container-analysis.yml)
+
+## Usage from ghcr.io
+
+```bash
+docker run ghcr.io/cniweb/cpuminer-opt:latest
+```
+
+<https://github.com/cniweb/srbminer-multi-docker/pkgs/container/srbminer-multi>
+
+## Usage from Docker.io
+
+```bash
+docker run docker.io/cniweb/srbminer-multi:latest
+```
+
+## Usage from Quay.io
+
+```bash
+docker run quay.io/cniweb/srbminer-multi:latest
+```
