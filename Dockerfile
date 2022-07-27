@@ -7,6 +7,9 @@ ENV ALGO="minotaurx"
 ENV POOL_ADDRESS="stratum+tcp://minotaurx.na.mine.zergpool.com:7019"
 ENV WALLET_USER="LNec6RpZxX6Q1EJYkKjUPBTohM7Ux6uMUy"
 ENV PASSWORD="c=LTC,ID=docker"
-ENV EXTRAS="--disable-gpu --cpu-threads 4"
+ENV EXTRAS="--api-enable --api-port 80 --disable-gpu --cpu-threads 4"
+EXPOSE 80
+COPY start_zergpool.sh /opt/SRBMiner-Multi-1-0-2/
+RUN chmod +x /opt/SRBMiner-Multi-1-0-2/start_zergpool.sh
 WORKDIR "/opt/SRBMiner-Multi-1-0-2"
-CMD ["./SRBMiner-MULTI", "--algorithm $ALGO --pool $POOL_ADDRESS --wallet $WALLET_USER --password $PASSWORD $EXTRAS"]
+ENTRYPOINT ["./start_zergpool.sh"]
