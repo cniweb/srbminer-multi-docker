@@ -8,7 +8,7 @@ Mine up to 4 different algorithms/coins at the same time!
 ## Usage from ghcr.io
 
 ```bash
-docker run ghcr.io/cniweb/cpuminer-opt:latest
+docker run ghcr.io/cniweb/srbminer-multi:latest
 ```
 
 <https://github.com/cniweb/srbminer-multi-docker/pkgs/container/srbminer-multi>
