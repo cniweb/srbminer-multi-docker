@@ -1,8 +1,15 @@
 FROM debian:stable-slim
-RUN apt-get update && apt-get -y install wget xz-utils && \
-    cd /opt && wget https://github.com/doktor83/SRBMiner-Multi/releases/download/2.2.4/SRBMiner-Multi-2-2-4-Linux.tar.xz -O SRBMiner-Multi.tar.xz && \
-	tar xf SRBMiner-Multi.tar.xz && rm -rf /opt/SRBMiner-Multi.tar.xz && mv /opt/SRBMiner-Multi-2-2-4/ /opt/SRBMiner-Multi/ && \
-	apt-get -y purge xz-utils && apt-get -y autoremove --purge && apt-get -y clean && apt-get -y autoclean && rm -rf /var/lib/apt-get/lists/*
+RUN apt-get update && apt-get -y install wget xz-utils \
+    && cd /opt \
+    && wget https://github.com/doktor83/SRBMiner-Multi/releases/download/2.2.4/SRBMiner-Multi-2-2-4-Linux.tar.xz -O SRBMiner-Multi.tar.xz \
+    && tar xf SRBMiner-Multi.tar.xz \
+    && rm -rf /opt/SRBMiner-Multi.tar.xz \
+    && mv /opt/SRBMiner-Multi-2-2-4/ /opt/SRBMiner-Multi/ \
+    && apt-get -y purge xz-utils \
+    && apt-get -y autoremove --purge \
+    && apt-get -y clean \
+    && apt-get -y autoclean \
+    && rm -rf /var/lib/apt-get/lists/*
 ENV ALGO="minotaurx"
 ENV POOL_ADDRESS="stratum+tcp://minotaurx.na.mine.zergpool.com:7019"
 ENV WALLET_USER="LNec6RpZxX6Q1EJYkKjUPBTohM7Ux6uMUy"
