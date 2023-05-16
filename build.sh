@@ -1,5 +1,5 @@
 #!/bin/bash
-version="2.2.4"
+version="2.2.5"
 image="srbminer-multi"
 docker build . --tag docker.io/cniweb/$image:$version
 docker tag docker.io/cniweb/$image:$version docker.io/cniweb/$image:latest
