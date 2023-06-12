@@ -1,10 +1,10 @@
 FROM debian:stable-slim
 RUN apt-get update && apt-get -y install wget xz-utils \
     && cd /opt \
-    && wget https://github.com/doktor83/SRBMiner-Multi/releases/download/2.2.8/SRBMiner-Multi-2-2-8-Linux.tar.xz -O SRBMiner-Multi.tar.xz \
+    && wget https://github.com/doktor83/SRBMiner-Multi/releases/download/2.2.9/SRBMiner-Multi-2-2-9-Linux.tar.xz -O SRBMiner-Multi.tar.xz \
     && tar xf SRBMiner-Multi.tar.xz \
     && rm -rf /opt/SRBMiner-Multi.tar.xz \
-    && mv /opt/SRBMiner-Multi-2-2-8/ /opt/SRBMiner-Multi/ \
+    && mv /opt/SRBMiner-Multi-2-2-9/ /opt/SRBMiner-Multi/ \
     && apt-get -y purge xz-utils \
     && apt-get -y autoremove --purge \
     && apt-get -y clean \
