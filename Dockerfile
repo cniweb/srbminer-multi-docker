@@ -6,17 +6,16 @@ ENV WALLET_USER="LNec6RpZxX6Q1EJYkKjUPBTohM7Ux6uMUy"
 ENV PASSWORD="c=LTC,ID=docker"
 ENV EXTRAS="--api-enable --api-port 80 --disable-auto-affinity --disable-gpu"
 
-RUN apt-get update && apt-get -y install wget xz-utils && \
-    cd /opt && \
-    wget https://github.com/doktor83/SRBMiner-Multi/releases/download/2.3.7/SRBMiner-Multi-2-3-7-Linux.tar.xz -O SRBMiner-Multi.tar.xz && \
-    tar xf SRBMiner-Multi.tar.xz && \
-    rm -rf /opt/SRBMiner-Multi.tar.xz && \
-    mv /opt/SRBMiner-Multi-2-3-7/ /opt/SRBMiner-Multi/ && \
-    apt-get -y purge xz-utils && \
-    apt-get -y autoremove --purge && \
-    apt-get -y clean && \
-    apt-get -y autoclean && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get update \
+    && apt-get -y install curl xz-utils \
+    && curl -L https://github.com/doktor83/SRBMiner-Multi/releases/download/2.3.8/SRBMiner-Multi-2-3-8-Linux.tar.xz -o SRBMiner-Multi.tar.xz \
+    && tar xf SRBMiner-Multi.tar.xz \
+    && rm -rf SRBMiner-Multi.tar.xz \
+    && mv /opt/SRBMiner-Multi-2-3-8/ /opt/SRBMiner-Multi/ \
+    && apt-get -y purge xz-utils \
+    && apt-get -y autoremove --purge \
+    && apt-get -y clean \
+    && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 WORKDIR /opt/SRBMiner-Multi/
 COPY start_zergpool.sh .
