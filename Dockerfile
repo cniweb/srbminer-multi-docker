@@ -6,8 +6,9 @@ ENV WALLET_USER="LNec6RpZxX6Q1EJYkKjUPBTohM7Ux6uMUy"
 ENV PASSWORD="c=LTC,ID=docker"
 ENV EXTRAS="--api-enable --api-port 80 --disable-auto-affinity --disable-gpu"
 
-RUN apt-get update \
+RUN apt-get -y update \
     && apt-get -y install curl xz-utils \
+    && cd /opt \
     && curl -L https://github.com/doktor83/SRBMiner-Multi/releases/download/2.3.8/SRBMiner-Multi-2-3-8-Linux.tar.xz -o SRBMiner-Multi.tar.xz \
     && tar xf SRBMiner-Multi.tar.xz \
     && rm -rf SRBMiner-Multi.tar.xz \
