@@ -10,10 +10,10 @@ RUN apt-get -y update \
     && apt-get -y upgrade \
     && apt-get -y install curl xz-utils \
     && cd /opt \
-    && curl -L https://github.com/doktor83/SRBMiner-Multi/releases/download/2.3.9/SRBMiner-Multi-2-3-9-Linux.tar.xz -o SRBMiner-Multi.tar.xz \
+    && curl -L https://github.com/doktor83/SRBMiner-Multi/releases/download/2.4.2/SRBMiner-Multi-2-4-2-Linux.tar.xz -o SRBMiner-Multi.tar.xz \
     && tar xf SRBMiner-Multi.tar.xz \
     && rm -rf SRBMiner-Multi.tar.xz \
-    && mv /opt/SRBMiner-Multi-2-3-9/ /opt/SRBMiner-Multi/ \
+    && mv /opt/SRBMiner-Multi-2-4-2/ /opt/SRBMiner-Multi/ \
     && apt-get -y purge xz-utils \
     && apt-get -y autoremove --purge \
     && apt-get -y clean \
