@@ -1,7 +1,7 @@
 FROM debian:stable-slim
 
-ENV ALGO="minotaurx"
-ENV POOL_ADDRESS="stratum+tcp://minotaurx.na.mine.zergpool.com:7019"
+ENV ALGO="yespoweric"
+ENV POOL_ADDRESS="stratum+tcp://yespowerIC.na.mine.zergpool.com:6238"
 ENV WALLET_USER="LNec6RpZxX6Q1EJYkKjUPBTohM7Ux6uMUy"
 ENV PASSWORD="c=LTC,ID=docker"
 ENV EXTRAS="--api-enable --api-port 80 --disable-auto-affinity --disable-gpu"
