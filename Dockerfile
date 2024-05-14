@@ -8,13 +8,12 @@ ENV EXTRAS="--api-enable --api-port 80 --disable-auto-affinity --disable-gpu"
 
 RUN apt-get -y update \
     && apt-get -y upgrade \
-    && apt-get -y install curl xz-utils wget \
+    && apt-get -y install curl wget \
     && cd /opt \
-    && curl -L https://github.com/doktor83/SRBMiner-Multi/releases/download/2.4.7/SRBMiner-Multi-2-4-7-Linux.tar.xz -o SRBMiner-Multi.tar.xz \
-    && tar xf SRBMiner-Multi.tar.xz \
-    && rm -rf SRBMiner-Multi.tar.xz \
-    && mv /opt/SRBMiner-Multi-2-4-7/ /opt/SRBMiner-Multi/ \
-    && apt-get -y purge xz-utils \
+    && curl -L https://github.com/doktor83/SRBMiner-Multi/releases/download/2.5.3/SRBMiner-Multi-2-5-3-Linux.tar.gz -o SRBMiner-Multi.tar.gz \
+    && tar xf SRBMiner-Multi.tar.gz \
+    && rm -rf SRBMiner-Multi.tar.gz \
+    && mv /opt/SRBMiner-Multi-2-5-3/ /opt/SRBMiner-Multi/ \
     && apt-get -y autoremove --purge \
     && apt-get -y clean \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
