@@ -1,15 +1,27 @@
 #!/bin/bash
-version="2.5.3"
+# Define image name, version and registries
 image="srbminer-multi"
-docker build . --tag docker.io/cniweb/$image:$version
-docker tag docker.io/cniweb/$image:$version docker.io/cniweb/$image:latest
-docker tag docker.io/cniweb/$image:$version ghcr.io/cniweb/$image:$version
-docker tag docker.io/cniweb/$image:$version ghcr.io/cniweb/$image:latest
-docker tag docker.io/cniweb/$image:$version quay.io/cniweb/$image:$version
-docker tag docker.io/cniweb/$image:$version quay.io/cniweb/$image:latest
-docker push docker.io/cniweb/$image:$version
-docker push docker.io/cniweb/$image:latest
-docker push ghcr.io/cniweb/$image:$version
-docker push ghcr.io/cniweb/$image:latest
-docker push quay.io/cniweb/$image:$version
-docker push quay.io/cniweb/$image:latest
+version="2.6.9"
+registries=("docker.io" "ghcr.io" "quay.io")
+
+# Build the image
+docker build . --build-arg VERSION_TAG=$version --tag ${registries[0]}/cniweb/$image:$version
+
+# Check if the command was successful
+if [ $? -ne 0 ]; then
+  echo "Docker build failed!"
+  exit 1
+fi
+
+echo "Docker build succeeded!"
+
+# Tag and push the images
+for registry in "${registries[@]}"; do
+  docker tag ${registries[0]}/cniweb/$image:$version $registry/cniweb/$image:$version
+  docker tag ${registries[0]}/cniweb/$image:$version $registry/cniweb/$image:latest
+  
+  # Push both versioned and latest tags
+  docker push $registry/cniweb/$image:$version
+  docker push $registry/cniweb/$image:latest
+done
+
