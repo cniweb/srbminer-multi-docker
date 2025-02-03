@@ -49,6 +49,7 @@ jobs:
       with:
         image: cniweb/srbminer-multi
         args: --file=Dockerfile
+        sarif: true
     - name: Upload result to GitHub Code Scanning
       uses: github/codeql-action/upload-sarif@v3
       with:
