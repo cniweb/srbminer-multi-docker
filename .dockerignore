@@ -13,3 +13,6 @@ LICENSE
 # Temporary files
 *.tmp
 *.log
+
+# Whitesource config
+.whitesource
