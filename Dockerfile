@@ -1,4 +1,4 @@
-FROM debian:stable-slim
+FROM debian:bookworm-slim
 
 ARG VERSION_TAG=2.5.3
 ENV ALGO="randomx"
