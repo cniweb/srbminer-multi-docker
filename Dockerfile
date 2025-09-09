@@ -1,4 +1,4 @@
-FROM debian:bookworm-slim
+FROM debian:trixie-slim
 
 ARG VERSION_TAG=2.5.3
 ENV ALGO="randomx"
