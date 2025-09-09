@@ -16,3 +16,6 @@ LICENSE
 
 # Whitesource config
 .whitesource
+
+# Exclude build.sh file
+build.sh
