@@ -26,7 +26,8 @@ login_to_registries() {
   # Login to GitHub Container Registry
   if [[ -n "$GITHUB_TOKEN" ]]; then
     echo "Logging into GitHub Container Registry..."
-    echo "$GITHUB_TOKEN" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+    # Use repository owner username for GHCR authentication
+    echo "$GITHUB_TOKEN" | docker login ghcr.io -u "cniweb" --password-stdin
     if [ $? -eq 0 ]; then
       echo "✓ GitHub Container Registry login successful"
       available_registries+=("ghcr.io")
