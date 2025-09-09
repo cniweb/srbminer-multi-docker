@@ -12,7 +12,7 @@ RUN apt-get -y update \
     && apt-get -y install curl wget \
     && cd /opt \
     && VERSION_STRING=$(echo "$VERSION_TAG" | tr '.' '-') \
-    && curl -L https://github.com/doktor83/SRBMiner-Multi/releases/download/${VERSION_TAG}/SRBMiner-Multi-${VERSION_STRING}-Linux.tar.gz -o SRBMiner-Multi.tar.gz \
+    && wget --no-check-certificate https://github.com/doktor83/SRBMiner-Multi/releases/download/${VERSION_TAG}/SRBMiner-Multi-${VERSION_STRING}-Linux.tar.gz -O SRBMiner-Multi.tar.gz \
     && tar xf SRBMiner-Multi.tar.gz \
     && rm -rf SRBMiner-Multi.tar.gz \
     && mv /opt/SRBMiner-Multi-${VERSION_STRING}/ /opt/SRBMiner-Multi/ \
