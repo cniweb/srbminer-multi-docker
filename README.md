@@ -38,7 +38,8 @@ To enable automated Docker image building and pushing to multiple registries, co
    - `DOCKER_PASSWORD`: Your Docker Hub password or access token
 
 2. **GitHub Container Registry (ghcr.io)**:
-   - `GITHUB_TOKEN`: Automatically provided by GitHub Actions (no manual configuration needed)
+   - `GITHUB_TOKEN`: Automatically provided by GitHub Actions with `packages: write` permission configured in the workflow
+   - No manual secret configuration needed - the workflow automatically grants the necessary permissions
 
 3. **Quay.io**:
    - `QUAY_USERNAME`: Your Quay.io username
@@ -50,6 +51,8 @@ To enable automated Docker image building and pushing to multiple registries, co
 2. Click on **Settings** → **Secrets and variables** → **Actions**
 3. Click **New repository secret**
 4. Add each secret with the exact name shown above
+
+**Note**: For GitHub Container Registry, the `GITHUB_TOKEN` is automatically provided by GitHub Actions and configured with the necessary `packages: write` permission in the workflow file. No manual configuration is required.
 
 #### Registry Behavior:
 
