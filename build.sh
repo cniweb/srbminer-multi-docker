@@ -16,8 +16,7 @@ login_to_registries() {
       echo "✓ Docker Hub login successful"
       available_registries+=("docker.io")
     else
-      echo "✗ Docker Hub login failed"
-      exit 1
+      echo "✗ Docker Hub login failed, skipping docker.io registry"
     fi
   else
     echo "⚠ Docker Hub credentials not provided. Skipping docker.io registry."
@@ -32,8 +31,7 @@ login_to_registries() {
       echo "✓ GitHub Container Registry login successful"
       available_registries+=("ghcr.io")
     else
-      echo "✗ GitHub Container Registry login failed"
-      exit 1
+      echo "✗ GitHub Container Registry login failed, skipping ghcr.io registry"
     fi
   else
     echo "⚠ GitHub token not provided. Skipping ghcr.io registry."
@@ -47,8 +45,7 @@ login_to_registries() {
       echo "✓ Quay.io login successful"
       available_registries+=("quay.io")
     else
-      echo "✗ Quay.io login failed"
-      exit 1
+      echo "✗ Quay.io login failed, skipping quay.io registry"
     fi
   else
     echo "⚠ Quay.io credentials not provided. Skipping quay.io registry."
@@ -90,21 +87,27 @@ for registry in "${available_registries[@]}"; do
   docker tag ${available_registries[0]}/cniweb/$image:$version $registry/cniweb/$image:latest
   
   # Push both versioned and latest tags
+  push_failed=false
+  
   echo "Pushing $registry/cniweb/$image:$version..."
   docker push $registry/cniweb/$image:$version
   if [ $? -ne 0 ]; then
     echo "❌ Failed to push $registry/cniweb/$image:$version"
-    exit 1
+    push_failed=true
   fi
   
   echo "Pushing $registry/cniweb/$image:latest..."
   docker push $registry/cniweb/$image:latest
   if [ $? -ne 0 ]; then
     echo "❌ Failed to push $registry/cniweb/$image:latest"
-    exit 1
+    push_failed=true
   fi
   
-  echo "✓ Successfully pushed to $registry"
+  if [ "$push_failed" = true ]; then
+    echo "⚠ Some pushes failed for $registry, but continuing with other registries"
+  else
+    echo "✓ Successfully pushed to $registry"
+  fi
 done
 
 echo "🎉 All images built and pushed successfully!"
