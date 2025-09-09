@@ -11,8 +11,7 @@ login_to_registries() {
   # Login to Docker Hub
   if [[ -n "$DOCKER_USERNAME" && -n "$DOCKER_PASSWORD" ]]; then
     echo "Logging into Docker Hub..."
-    echo "$DOCKER_PASSWORD" | docker login docker.io -u "$DOCKER_USERNAME" --password-stdin
-    if [ $? -eq 0 ]; then
+    if docker login docker.io -u "$DOCKER_USERNAME" --password-stdin <<< "$DOCKER_PASSWORD"; then
       echo "✓ Docker Hub login successful"
       available_registries+=("docker.io")
     else
@@ -26,8 +25,7 @@ login_to_registries() {
   if [[ -n "$GITHUB_TOKEN" ]]; then
     echo "Logging into GitHub Container Registry..."
     # Use repository owner username for GHCR authentication
-    echo "$GITHUB_TOKEN" | docker login ghcr.io -u "cniweb" --password-stdin
-    if [ $? -eq 0 ]; then
+    if docker login ghcr.io -u "cniweb" --password-stdin <<< "$GITHUB_TOKEN"; then
       echo "✓ GitHub Container Registry login successful"
       available_registries+=("ghcr.io")
     else
@@ -40,8 +38,7 @@ login_to_registries() {
   # Login to Quay.io
   if [[ -n "$QUAY_USERNAME" && -n "$QUAY_PASSWORD" ]]; then
     echo "Logging into Quay.io..."
-    echo "$QUAY_PASSWORD" | docker login quay.io -u "$QUAY_USERNAME" --password-stdin
-    if [ $? -eq 0 ]; then
+    if docker login quay.io -u "$QUAY_USERNAME" --password-stdin <<< "$QUAY_PASSWORD"; then
       echo "✓ Quay.io login successful"
       available_registries+=("quay.io")
     else

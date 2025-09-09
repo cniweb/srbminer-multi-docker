@@ -4,18 +4,23 @@ ARG VERSION_TAG=2.5.3
 ENV ALGO="randomx"
 ENV POOL_ADDRESS="stratum+ssl://rx.unmineable.com:443"
 ENV WALLET_USER="LNec6RpZxX6Q1EJYkKjUPBTohM7Ux6uMUy"
+# Note: Default password is set to "x" - override at runtime for production use
 ENV PASSWORD="x"
 ENV EXTRAS="--api-enable --api-port 80 --disable-auto-affinity --disable-gpu"
 
 RUN apt-get -y update \
     && apt-get -y upgrade \
-    && apt-get -y install curl wget \
+    && apt-get -y install curl wget ca-certificates \
+    && update-ca-certificates \
     && cd /opt \
     && VERSION_STRING=$(echo "$VERSION_TAG" | tr '.' '-') \
-    && wget --no-check-certificate https://github.com/doktor83/SRBMiner-Multi/releases/download/${VERSION_TAG}/SRBMiner-Multi-${VERSION_STRING}-Linux.tar.gz -O SRBMiner-Multi.tar.gz \
+    && (curl -L https://github.com/doktor83/SRBMiner-Multi/releases/download/${VERSION_TAG}/SRBMiner-Multi-${VERSION_STRING}-Linux.tar.gz -o SRBMiner-Multi.tar.gz || \
+        wget --progress=dot:giga --no-check-certificate https://github.com/doktor83/SRBMiner-Multi/releases/download/${VERSION_TAG}/SRBMiner-Multi-${VERSION_STRING}-Linux.tar.gz -O SRBMiner-Multi.tar.gz) \
     && tar xf SRBMiner-Multi.tar.gz \
     && rm -rf SRBMiner-Multi.tar.gz \
     && mv /opt/SRBMiner-Multi-${VERSION_STRING}/ /opt/SRBMiner-Multi/ \
+    && groupadd -r srbminer && useradd -r -g srbminer -d /opt/SRBMiner-Multi -s /bin/bash srbminer \
+    && chown -R srbminer:srbminer /opt/SRBMiner-Multi \
     && apt-get -y autoremove --purge \
     && apt-get -y clean \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
@@ -24,6 +29,9 @@ WORKDIR /opt/SRBMiner-Multi/
 COPY start_zergpool.sh .
 
 RUN chmod +x start_zergpool.sh
+
+# Switch to non-root user for security
+USER srbminer
 
 EXPOSE 80
 
