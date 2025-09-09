@@ -1,7 +1,7 @@
 #!/bin/bash
 # Define image name, version and registries
 image="srbminer-multi"
-version="2.7.5"
+version="2.9,7"
 registries=("docker.io" "ghcr.io" "quay.io")
 
 # Build the image
