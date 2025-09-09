@@ -1,0 +1,15 @@
+# Git files
+.git
+.gitignore
+
+# Documentation
+README.md
+LICENSE
+
+# Development files
+.env
+.env.*
+
+# Temporary files
+*.tmp
+*.log
