@@ -1,9 +1,9 @@
 FROM debian:trixie-slim
 
-ARG VERSION_TAG=2.5.3
+ARG VERSION_TAG=3.0.2
 ENV ALGO="randomx"
 ENV POOL_ADDRESS="stratum+ssl://rx.unmineable.com:443"
-ENV WALLET_USER="LNec6RpZxX6Q1EJYkKjUPBTohM7Ux6uMUy"
+ENV WALLET_USER="ltc1q6c4vres6a390mtm4updr5jc6thyv22pu0dupq8"
 # Note: Default password is set to "x" - override at runtime for production use
 ENV PASSWORD="x"
 ENV EXTRAS="--api-enable --api-port 80 --disable-auto-affinity --disable-gpu"
