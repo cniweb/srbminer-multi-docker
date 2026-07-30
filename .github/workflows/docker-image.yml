@@ -1,2 +1,0 @@
-# DEPRECATED: This workflow has been replaced by docker-build.yml
-# See .github/workflows/docker-build.yml for the current CI/CD pipeline.
