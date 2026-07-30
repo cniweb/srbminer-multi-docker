@@ -3,10 +3,10 @@ FROM debian:trixie-slim
 ARG VERSION_TAG=3.0.2
 ENV ALGO="randomx"
 ENV POOL_ADDRESS="stratum+ssl://rx.unmineable.com:443"
-ENV WALLET_USER="ltc1q6c4vres6a390mtm4updr5jc6thyv22pu0dupq8"
+ENV WALLET_USER="YOUR_WALLET_ADDRESS"
 # Note: Default password is set to "x" - override at runtime for production use
 ENV PASSWORD="x"
-ENV EXTRAS="--api-enable --api-port 80 --disable-auto-affinity --disable-gpu"
+ENV EXTRAS="--api-enable --api-port 8080 --disable-auto-affinity --disable-gpu"
 
 # SRBMiner-Multi checksum for tarball integrity verification
 ARG EXPECTED_SHA256=""
@@ -43,10 +43,10 @@ RUN chmod +x start_zergpool.sh
 # Switch to non-root user for security
 USER srbminer
 
-EXPOSE 80
+EXPOSE 8080
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD ["/opt/SRBMiner-Multi/SRBMiner-MULTI", "--version"]
 
 ENTRYPOINT ["./start_zergpool.sh"]
-CMD ["--api-enable", "--api-port", "80", "--disable-auto-affinity", "--disable-gpu"]
+CMD ["--api-enable", "--api-port", "8080", "--disable-auto-affinity", "--disable-gpu"]

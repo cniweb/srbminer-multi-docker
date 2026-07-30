@@ -1,4 +1,6 @@
 #!/bin/bash
+set -eu
+
 # Define image name, version and registries
 image="srbminer-multi"
 version="3.0.2"

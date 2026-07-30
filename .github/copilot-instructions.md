@@ -26,8 +26,8 @@ Always reference these instructions first and fallback to search or bash command
   - Exits quickly if pool connection fails (expected behavior)
   - Use environment variables to customize: ALGO, POOL_ADDRESS, WALLET_USER, PASSWORD, EXTRAS
 - **Test different algorithms**: `docker run --rm -e ALGO=cpupower -e POOL_ADDRESS=test.pool.com:4444 test-image`
-- **API testing**: Container exposes port 80 for SRBMiner API when --api-enable flag is used
-  - Start with port mapping: `docker run -d -p 8080:80 test-image`
+- **API testing**: Container exposes port 8080 for SRBMiner API when --api-enable flag is used
+  - Start with port mapping: `docker run -d -p 8080:8080 test-image`
   - API endpoints depend on SRBMiner-Multi version and configuration
   - Connection may reset if miner exits quickly (expected when no pool connection)
 - **Environment variable validation**: `docker run --rm --entrypoint=/bin/bash test-image -c "env | grep -E '(ALGO|POOL|WALLET|PASSWORD)'"`
@@ -55,7 +55,7 @@ Always validate these scenarios after making changes:
 - `POOL_ADDRESS`: Mining pool URL (default: "stratum+ssl://rx.unmineable.com:443") 
 - `WALLET_USER`: Wallet address for mining (default: "LNec6RpZxX6Q1EJYkKjUPBTohM7Ux6uMUy")
 - `PASSWORD`: Pool password (default: "x")
-- `EXTRAS`: Additional SRBMiner flags (default: "--api-enable --api-port 80 --disable-auto-affinity --disable-gpu")
+- `EXTRAS`: Additional SRBMiner flags (default: "--api-enable --api-port 8080 --disable-auto-affinity --disable-gpu")
 
 **Note**: Environment variables can be overridden at runtime with `-e` flags
 
@@ -112,7 +112,7 @@ docker run --rm srbminer-multi
 docker run --rm -e ALGO=cpupower -e POOL_ADDRESS=your.pool.com:4444 -e WALLET_USER=your_wallet srbminer-multi
 
 # With API port exposed
-docker run -d -p 8080:80 --name miner srbminer-multi
+docker run -d -p 8080:8080 --name miner srbminer-multi
 ```
 
 ### File Structure Inside Container
