@@ -60,14 +60,14 @@ if [ "$1" = "build-only" ]; then
   exit 0
 fi
 
+# Login to configured registries
+login_to_registries
+
 # Run security check if available
 if [ -f "security-check.sh" ]; then
     echo "Running security check..."
     ./security-check.sh
 fi
-
-# Login to configured registries
-login_to_registries
 
 # Check if we have at least one registry configured
 if [[ ${#available_registries[@]} -eq 0 ]]; then
