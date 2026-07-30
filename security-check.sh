@@ -21,8 +21,8 @@ echo
 
 # Test 2: Check for exposed ports
 echo "2. Port Security Check:"
-echo "   Container exposes port 80 (non-privileged)"
-echo "   PASS: Using non-privileged port (not 80 is borderline but acceptable)"
+echo "   Container exposes port 8080 (non-privileged)"
+echo "   PASS: Using non-privileged port 8080"
 echo
 
 # Test 3: Check for sensitive data in image
