@@ -7,7 +7,7 @@ Create a release for this repository.
 
 ## Workflow
 
-1. **Version input.** If no version is provided in the request, ask for it (format `3.0.2` or `v3.0.2`).
+1. **Version input.** If no version is provided in the request, ask for it (format `3.4.7` or `v3.4.7`).
 2. **Normalize** to `VERSION` (without `v`) and `TAG` (`v${VERSION}`).
 3. **Fetch upstream SRBMiner-Multi release notes** from `https://github.com/doktor83/SRBMiner-Multi/releases/tag/${VERSION}` using `gh release view ${VERSION} --repo doktor83/SRBMiner-Multi --json body -q .body`. Extract the changelog items (bug fixes, features, improvements) — ignore SHA256 checksums and GPG signatures.
 4. **Update `CHANGELOG.md`**: add a new section at the top (below the header) with:

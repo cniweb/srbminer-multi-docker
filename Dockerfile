@@ -1,6 +1,6 @@
 FROM debian:trixie-slim
 
-ARG VERSION_TAG=3.0.2
+ARG VERSION_TAG=3.4.7
 ENV ALGO="randomx"
 ENV POOL_ADDRESS="stratum+ssl://rx.unmineable.com:443"
 ENV WALLET_USER="YOUR_WALLET_ADDRESS"

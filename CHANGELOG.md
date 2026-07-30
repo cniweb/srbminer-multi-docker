@@ -3,6 +3,11 @@
 All notable changes to this Docker packaging project are documented here.
 Each entry tracks the upstream [SRBMiner-Multi](https://github.com/doktor83/SRBMiner-Multi) version used and any packaging changes made in this repository.
 
+## [3.4.7] - 2026-07-30
+
+### Changed
+- Updated SRBMiner-Multi from 3.0.2 to 3.4.7
+
 ## [Unreleased]
 
 ### CI/CD & Repo Hygiene
