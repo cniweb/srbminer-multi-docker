@@ -67,12 +67,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Login to Quay.io
-        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4
-        with:
-          registry: quay.io
-          username: ${{ secrets.QUAY_USERNAME }}
-          password: ${{ secrets.QUAY_PASSWORD }}
 
       - name: Make build script executable
         run: chmod +x ./build.sh
@@ -108,10 +102,6 @@ jobs:
           docker tag docker.io/cniweb/srbminer-multi:${{ steps.get_version.outputs.version }} ghcr.io/cniweb/srbminer-multi:${{ steps.get_version.outputs.version }}
           docker tag docker.io/cniweb/srbminer-multi:${{ steps.get_version.outputs.version }} ghcr.io/cniweb/srbminer-multi:${{ github.sha }}
 
-          # Tag for Quay.io
-          docker tag docker.io/cniweb/srbminer-multi:${{ steps.get_version.outputs.version }} quay.io/cniweb/srbminer-multi:latest
-          docker tag docker.io/cniweb/srbminer-multi:${{ steps.get_version.outputs.version }} quay.io/cniweb/srbminer-multi:${{ steps.get_version.outputs.version }}
-          docker tag docker.io/cniweb/srbminer-multi:${{ steps.get_version.outputs.version }} quay.io/cniweb/srbminer-multi:${{ github.sha }}
 
       - name: Push Docker images to all registries
         id: push
@@ -126,10 +116,6 @@ jobs:
           docker push ghcr.io/cniweb/srbminer-multi:${{ steps.get_version.outputs.version }}
           docker push ghcr.io/cniweb/srbminer-multi:${{ github.sha }}
 
-          # Push to Quay.io
-          docker push quay.io/cniweb/srbminer-multi:latest
-          docker push quay.io/cniweb/srbminer-multi:${{ steps.get_version.outputs.version }}
-          docker push quay.io/cniweb/srbminer-multi:${{ github.sha }}
 
           # Capture the GHCR-specific digest for attestation/SBOM
           DIGEST=$(docker inspect --format='{{range .RepoDigests}}{{println .}}{{end}}' ghcr.io/cniweb/srbminer-multi:${{ steps.get_version.outputs.version }} | grep '^ghcr.io/cniweb/srbminer-multi@' | head -n1 | cut -d'@' -f2)
@@ -179,7 +165,7 @@ jobs:
             const previous = releases.find(r => !r.draft && !r.prerelease && r.tag_name !== tag);
 
             let name = `SRBMiner-Multi Docker v${version}`;
-            let body = `## SRBMiner-Multi Docker Image v${version}\n\nDocker images successfully built and pushed to:\n- Docker Hub: \`docker.io/cniweb/srbminer-multi:${version}\`\n- GitHub Container Registry: \`ghcr.io/cniweb/srbminer-multi:${version}\`\n- Quay.io: \`quay.io/cniweb/srbminer-multi:${version}\`\n\n### Usage\n\`\`\`bash\ndocker pull cniweb/srbminer-multi:${version}\n\`\`\`\n\nBased on [SRBMiner-Multi ${version}](https://github.com/doktor83/SRBMiner-Multi/releases/tag/${version})`;
+            let body = `## SRBMiner-Multi Docker Image v${version}\n\nDocker images successfully built and pushed to:\n- Docker Hub: \`docker.io/cniweb/srbminer-multi:${version}\`\n- GitHub Container Registry: \`ghcr.io/cniweb/srbminer-multi:${version}\`\n\n### Usage\n\`\`\`bash\ndocker pull cniweb/srbminer-multi:${version}\n\`\`\`\n\nBased on [SRBMiner-Multi ${version}](https://github.com/doktor83/SRBMiner-Multi/releases/tag/${version})`;
 
             if (previous) {
               const oldTag = previous.tag_name || "";
