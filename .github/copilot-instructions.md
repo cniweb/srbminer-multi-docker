@@ -47,7 +47,7 @@ Always validate these scenarios after making changes:
 ### Prerequisites
 - Docker Engine installed and running
 - For builds: Access to GitHub releases (github.com)
-- For pushes: Authentication to Docker registries (docker.io, ghcr.io, quay.io)
+- For pushes: Authentication to Docker registries (docker.io, ghcr.io)
 
 ### Build Arguments and Environment Variables
 - `VERSION_TAG`: SRBMiner-Multi version to download (default: 2.5.3, current: 2.9.7)
@@ -81,7 +81,7 @@ The following are validated commands and their expected outcomes:
 ```
 .github/workflows/    # CI/CD pipelines
 ├── docker-image.yml  # Main build workflow (runs ./build.sh)
-└── snyk-container.yml # Security scanning with SARIF file patching
+└── snyk-container-analysis.yml # Security scanning with SARIF file patching
 .dockerignore        # Excludes git, docs, temp files from build context
 .whitesource         # Mend (WhiteSource) security scanning configuration  
 Dockerfile           # Main container definition
@@ -126,7 +126,7 @@ docker run -d -p 8080:80 --name miner srbminer-multi
 ## CI/CD Pipeline
 - **GitHub Actions**: Automatically builds on push to main branch
 - **Security Scanning**: Snyk container vulnerability scanning with advanced SARIF file patching
-- **Multi-registry Publishing**: Pushes to docker.io, ghcr.io, and quay.io (requires secrets)
+- **Multi-registry Publishing**: Pushes to docker.io and ghcr.io (requires secrets)
 - **Mend Scanning**: WhiteSource security dependency scanning (.whitesource config)
 
 ### Validated Timing

@@ -8,7 +8,7 @@ Each entry tracks the upstream [SRBMiner-Multi](https://github.com/doktor83/SRBM
 ### CI/CD & Repo Hygiene
 - Replaced `docker-image.yml` with new `docker-build.yml` featuring validate + push jobs, SLSA provenance attestation, SBOM generation, and GitHub Release creation via `actions/github-script`
 - Added release automation workflow (`release-from-version.yml`)
-- Pinned all GitHub Actions to commit SHAs in `snyk-container.yml`:
+- Pinned all GitHub Actions to commit SHAs in `snyk-container-analysis.yml`:
   - `snyk/actions/docker@master` → `9adf32b1121593767fc3c057af55b55db032dc04` (v1.0.0)
   - `actions/checkout@v4` → `de0fac2e4500dabe0009e67214ff5f5447ce83dd` (v6)
   - `github/codeql-action/upload-sarif@v3` → `e46ed2cbd01164d986452f91f178727624ae40d7` (v4)
