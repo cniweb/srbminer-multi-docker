@@ -16,6 +16,12 @@ permissions:
 
 jobs:
   validate:
+    permissions:
+      contents: read
+      packages: read
+      id-token: none
+      attestations: none
+
     name: Build & validate
     runs-on: ubuntu-latest
     steps:

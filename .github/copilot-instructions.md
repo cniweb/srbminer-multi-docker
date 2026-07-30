@@ -1,17 +1,17 @@
 # SRBMiner-Multi Docker
 
-SRBMiner-Multi Docker is a containerized cryptocurrency mining solution that packages the high-performance SRBMiner-Multi software for CPU and AMD GPU mining. The project creates and publishes Docker images to multiple container registries (Docker Hub, GHCR, and Quay.io).
+SRBMiner-Multi Docker is a containerized cryptocurrency mining solution that packages the high-performance SRBMiner-Multi software for CPU and AMD GPU mining. The project creates and publishes Docker images to Docker Hub and GitHub Container Registry.
 
 Always reference these instructions first and fallback to search or bash commands only when you encounter unexpected information that does not match the info here.
 
 ## Working Effectively
 
 ### Bootstrap and Build
-- **Docker build**: `docker build --build-arg VERSION_TAG=2.9.7 -t srbminer-multi .`
+- **Docker build**: `docker build --build-arg VERSION_TAG=3.0.2 -t srbminer-multi .`
   - Clean build time: 10-14 seconds (measured). NEVER CANCEL. Set timeout to 30+ minutes for safety.
   - Cached build time: <1 second when using existing layers
   - Uses Debian trixie-slim base image  
-  - Downloads SRBMiner-Multi from GitHub releases using wget (SSL workaround included)
+  - Downloads SRBMiner-Multi from GitHub releases using curl
   - **IMPORTANT**: Shows security warning about PASSWORD env var - this is expected and safe
 - **Build script**: `./build.sh`
   - Builds Docker image and attempts to push to all registries
@@ -50,10 +50,10 @@ Always validate these scenarios after making changes:
 - For pushes: Authentication to Docker registries (docker.io, ghcr.io)
 
 ### Build Arguments and Environment Variables
-- `VERSION_TAG`: SRBMiner-Multi version to download (default: 2.5.3, current: 2.9.7)
+- `VERSION_TAG`: SRBMiner-Multi version to download (default: 3.0.2)
 - `ALGO`: Mining algorithm (default: "randomx")
 - `POOL_ADDRESS`: Mining pool URL (default: "stratum+ssl://rx.unmineable.com:443") 
-- `WALLET_USER`: Wallet address for mining (default: "LNec6RpZxX6Q1EJYkKjUPBTohM7Ux6uMUy")
+- `WALLET_USER`: Wallet address for mining (default: "YOUR_WALLET_ADDRESS")
 - `PASSWORD`: Pool password (default: "x")
 - `EXTRAS`: Additional SRBMiner flags (default: "--api-enable --api-port 8080 --disable-auto-affinity --disable-gpu")
 
@@ -64,8 +64,7 @@ Always validate these scenarios after making changes:
 ### Docker Build Warning
 The Dockerfile produces a security warning about ENV "PASSWORD" - this is expected and safe for this mining application.
 
-### SSL Certificate Issue
-The Dockerfile uses `wget --no-check-certificate` to download SRBMiner-Multi releases due to SSL certificate chain issues in some environments. This is a known limitation.
+
 
 ### Registry Authentication
 The `build.sh` script will fail to push images without proper authentication tokens. This is expected in development environments. The build portion will succeed.
@@ -80,9 +79,9 @@ The following are validated commands and their expected outcomes:
 ### Repository Structure
 ```
 .github/workflows/    # CI/CD pipelines
-├── docker-image.yml  # Main build workflow (runs ./build.sh)
+├── docker-build.yml  # Main build workflow (runs ./build.sh)
 └── snyk-container-analysis.yml # Security scanning with SARIF file patching
-.dockerignore        # Excludes git, docs, temp files from build context
+.dockerignore        # Excludes dev files from build context
 .whitesource         # Mend (WhiteSource) security scanning configuration  
 Dockerfile           # Main container definition
 build.sh            # Build and push script for multiple registries
@@ -93,11 +92,11 @@ LICENSE             # Apache License 2.0
 
 ### Build Commands
 ```bash
-# Basic build with default version (2.5.3)
+# Basic build with default version (3.0.2)
 docker build -t srbminer-multi .
-
+ 
 # Build with specific version
-docker build --build-arg VERSION_TAG=2.9.7 -t srbminer-multi .
+docker build --build-arg VERSION_TAG=3.0.2 -t srbminer-multi .
 
 # Build and tag for multiple registries (like build.sh does)
 ./build.sh
@@ -124,8 +123,8 @@ docker run -d -p 8080:8080 --name miner srbminer-multi
 ```
 
 ## CI/CD Pipeline
-- **GitHub Actions**: Automatically builds on push to main branch
-- **Security Scanning**: Snyk container vulnerability scanning with advanced SARIF file patching
+- **GitHub Actions**: `.github/workflows/docker-build.yml` builds on push/PR to main
+- **Security Scanning**: Snyk container vulnerability scanning via `snyk-container-analysis.yml`
 - **Multi-registry Publishing**: Pushes to docker.io and ghcr.io (requires secrets)
 - **Mend Scanning**: WhiteSource security dependency scanning (.whitesource config)
 
@@ -135,7 +134,7 @@ docker run -d -p 8080:8080 --name miner srbminer-multi
 - **Container startup**: <3 seconds to show parameters and attempt connection
 
 ## Troubleshooting
-- If build fails with SSL errors: Verify wget --no-check-certificate is used in Dockerfile
+
 - If container exits immediately: Check pool connectivity or use test pool
 - If push fails: Verify registry authentication (expected to fail in development)
 - If GitHub Actions fail: Check if VERSION_TAG in build.sh matches available releases

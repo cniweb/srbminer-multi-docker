@@ -36,7 +36,7 @@ RUN set -eu && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 WORKDIR /opt/SRBMiner-Multi/
-COPY start_zergpool.sh .
+COPY --chown=srbminer:srbminer start_zergpool.sh .
 
 RUN chmod +x start_zergpool.sh
 
@@ -49,4 +49,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD ["/opt/SRBMiner-Multi/SRBMiner-MULTI", "--version"]
 
 ENTRYPOINT ["./start_zergpool.sh"]
-CMD ["--api-enable", "--api-port", "8080", "--disable-auto-affinity", "--disable-gpu"]
+CMD []
