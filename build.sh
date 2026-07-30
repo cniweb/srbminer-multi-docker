@@ -7,7 +7,7 @@ declare -a available_registries=()
 # Function to login to registries and track which ones are available
 login_to_registries() {
   echo "Logging into Docker registries..."
-  
+
   # Login to Docker Hub
   if [[ -n "$DOCKER_USERNAME" && -n "$DOCKER_PASSWORD" ]]; then
     echo "Logging into Docker Hub..."
@@ -49,6 +49,33 @@ login_to_registries() {
   fi
 }
 
+echo "Building SRBMiner-Multi Docker image..."
+echo "Version: $version"
+echo
+
+# Build the image
+docker build . --build-arg VERSION_TAG="$version" --tag "docker.io/cniweb/$image:$version"
+
+# Check if the command was successful
+if [ $? -ne 0 ]; then
+  echo "❌ Docker build failed!"
+  exit 1
+fi
+
+echo "✓ Docker build succeeded!"
+
+# Check if we should only build (for CI/CD usage)
+if [ "$1" = "build-only" ]; then
+  echo "Build-only mode: skipping security check and push to registries"
+  exit 0
+fi
+
+# Run security check if available
+if [ -f "security-check.sh" ]; then
+    echo "Running security check..."
+    ./security-check.sh
+fi
+
 # Login to configured registries
 login_to_registries
 
@@ -64,42 +91,30 @@ fi
 
 echo "Available registries: ${available_registries[*]}"
 
-# Build the image using the first available registry
-echo "Building Docker image..."
-docker build . --build-arg VERSION_TAG=$version --tag ${available_registries[0]}/cniweb/$image:$version
-
-# Check if the command was successful
-if [ $? -ne 0 ]; then
-  echo "❌ Docker build failed!"
-  exit 1
-fi
-
-echo "✓ Docker build succeeded!"
-
 # Tag and push the images
 echo "Tagging and pushing images to configured registries..."
 for registry in "${available_registries[@]}"; do
   echo "Processing registry: $registry"
-  docker tag ${available_registries[0]}/cniweb/$image:$version $registry/cniweb/$image:$version
-  docker tag ${available_registries[0]}/cniweb/$image:$version $registry/cniweb/$image:latest
-  
+  docker tag "docker.io/cniweb/$image:$version" "$registry/cniweb/$image:$version"
+  docker tag "docker.io/cniweb/$image:$version" "$registry/cniweb/$image:latest"
+
   # Push both versioned and latest tags
   push_failed=false
-  
+
   echo "Pushing $registry/cniweb/$image:$version..."
-  docker push $registry/cniweb/$image:$version
+  docker push "$registry/cniweb/$image:$version"
   if [ $? -ne 0 ]; then
     echo "❌ Failed to push $registry/cniweb/$image:$version"
     push_failed=true
   fi
-  
+
   echo "Pushing $registry/cniweb/$image:latest..."
-  docker push $registry/cniweb/$image:latest
+  docker push "$registry/cniweb/$image:latest"
   if [ $? -ne 0 ]; then
     echo "❌ Failed to push $registry/cniweb/$image:latest"
     push_failed=true
   fi
-  
+
   if [ "$push_failed" = true ]; then
     echo "⚠ Some pushes failed for $registry, but continuing with other registries"
   else
@@ -108,4 +123,3 @@ for registry in "${available_registries[@]}"; do
 done
 
 echo "🎉 All images built and pushed successfully!"
-
