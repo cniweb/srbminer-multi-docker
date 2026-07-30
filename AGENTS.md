@@ -43,5 +43,5 @@ Primary instruction source: `.github/copilot-instructions.md` (canonical when it
 - `.github/workflows/docker-build.yml` runs on push and PR to `main`:
   - `validate` job: builds with `./build.sh build-only`, then runs `--version`, entrypoint-bypass validation, and `security-check.sh` against it. Never pushes.
   - `docker` job (push events only, gated on `validate` passing): rebuilds, re-validates, then tags and pushes to Docker Hub, GHCR, and Quay.io, generates SLSA provenance attestation and SBOM, and creates a GitHub Release.
-- Snyk container scanning runs on push/PR to `main` and weekly via `snyk-container.yml`.
+- Snyk container scanning runs on push/PR to `main` and weekly via `snyk-container-analysis.yml`.
 - Dependabot monitors Docker base images and GitHub Actions versions.
