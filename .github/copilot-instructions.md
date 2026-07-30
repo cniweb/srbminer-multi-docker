@@ -7,7 +7,7 @@ Always reference these instructions first and fallback to search or bash command
 ## Working Effectively
 
 ### Bootstrap and Build
-- **Docker build**: `docker build --build-arg VERSION_TAG=3.0.2 -t srbminer-multi .`
+- **Docker build**: `docker build --build-arg VERSION_TAG=3.4.7 -t srbminer-multi .`
   - Clean build time: 10-14 seconds (measured). NEVER CANCEL. Set timeout to 30+ minutes for safety.
   - Cached build time: <1 second when using existing layers
   - Uses Debian trixie-slim base image  
@@ -50,7 +50,7 @@ Always validate these scenarios after making changes:
 - For pushes: Authentication to Docker registries (docker.io, ghcr.io)
 
 ### Build Arguments and Environment Variables
-- `VERSION_TAG`: SRBMiner-Multi version to download (default: 3.0.2)
+- `VERSION_TAG`: SRBMiner-Multi version to download (default: 3.4.7)
 - `ALGO`: Mining algorithm (default: "randomx")
 - `POOL_ADDRESS`: Mining pool URL (default: "stratum+ssl://rx.unmineable.com:443") 
 - `WALLET_USER`: Wallet address for mining (default: "YOUR_WALLET_ADDRESS")
@@ -92,11 +92,11 @@ LICENSE             # Apache License 2.0
 
 ### Build Commands
 ```bash
-# Basic build with default version (3.0.2)
+# Basic build with default version (3.4.7)
 docker build -t srbminer-multi .
  
 # Build with specific version
-docker build --build-arg VERSION_TAG=3.0.2 -t srbminer-multi .
+docker build --build-arg VERSION_TAG=3.4.7 -t srbminer-multi .
 
 # Build and tag for multiple registries (like build.sh does)
 ./build.sh

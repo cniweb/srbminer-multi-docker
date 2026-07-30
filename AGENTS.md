@@ -34,7 +34,7 @@ Primary instruction source: `.github/copilot-instructions.md` (canonical when it
 
 ## Small gotchas
 
-- SRBMiner-Multi version tags on GitHub use dots (e.g. `3.0.2`) but the tarball name uses hyphens (e.g. `SRBMiner-Multi-3-0-2-Linux.tar.gz`). The `tr '.' '-'` transformation in the Dockerfile handles this.
+- SRBMiner-Multi version tags on GitHub use dots (e.g. `3.4.7`) but the tarball name uses hyphens (e.g. `SRBMiner-Multi-3-4-7-Linux.tar.gz`). The `tr '.' '-'` transformation in the Dockerfile handles this.
 - The default `WALLET_USER` is a placeholder — override it at runtime.
 - `.dockerignore` excludes `.github`, `build.sh`, and other dev files; changes there do not affect image build context.
 
