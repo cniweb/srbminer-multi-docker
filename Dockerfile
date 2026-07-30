@@ -8,22 +8,32 @@ ENV WALLET_USER="ltc1q6c4vres6a390mtm4updr5jc6thyv22pu0dupq8"
 ENV PASSWORD="x"
 ENV EXTRAS="--api-enable --api-port 80 --disable-auto-affinity --disable-gpu"
 
-RUN apt-get -y update \
-    && apt-get -y upgrade \
-    && apt-get -y install curl wget ca-certificates \
-    && update-ca-certificates \
-    && cd /opt \
-    && VERSION_STRING=$(echo "$VERSION_TAG" | tr '.' '-') \
-    && (curl -L https://github.com/doktor83/SRBMiner-Multi/releases/download/${VERSION_TAG}/SRBMiner-Multi-${VERSION_STRING}-Linux.tar.gz -o SRBMiner-Multi.tar.gz || \
-        wget --progress=dot:giga --no-check-certificate https://github.com/doktor83/SRBMiner-Multi/releases/download/${VERSION_TAG}/SRBMiner-Multi-${VERSION_STRING}-Linux.tar.gz -O SRBMiner-Multi.tar.gz) \
-    && tar xf SRBMiner-Multi.tar.gz \
-    && rm -rf SRBMiner-Multi.tar.gz \
-    && mv /opt/SRBMiner-Multi-${VERSION_STRING}/ /opt/SRBMiner-Multi/ \
-    && groupadd -r srbminer && useradd -r -g srbminer -d /opt/SRBMiner-Multi -s /bin/bash srbminer \
-    && chown -R srbminer:srbminer /opt/SRBMiner-Multi \
-    && apt-get -y autoremove --purge \
-    && apt-get -y clean \
-    && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
+# SRBMiner-Multi checksum for tarball integrity verification
+ARG EXPECTED_SHA256=""
+
+RUN set -eu && \
+    apt-get -y update && \
+    apt-get -y upgrade && \
+    apt-get -y install --no-install-recommends curl ca-certificates && \
+    update-ca-certificates && \
+    cd /opt && \
+    VERSION_STRING=$(echo "$VERSION_TAG" | tr '.' '-') && \
+    curl -L "https://github.com/doktor83/SRBMiner-Multi/releases/download/${VERSION_TAG}/SRBMiner-Multi-${VERSION_STRING}-Linux.tar.gz" -o SRBMiner-Multi.tar.gz && \
+    if [ -n "$EXPECTED_SHA256" ]; then \
+      echo "Verifying SHA256 checksum..." && \
+      echo "$EXPECTED_SHA256  SRBMiner-Multi.tar.gz" | sha256sum -c -; \
+    else \
+      echo "WARNING: SHA256 checksum verification skipped (no EXPECTED_SHA256 provided)"; \
+    fi && \
+    tar xf SRBMiner-Multi.tar.gz && \
+    rm -rf SRBMiner-Multi.tar.gz && \
+    mv "/opt/SRBMiner-Multi-${VERSION_STRING}/" /opt/SRBMiner-Multi/ && \
+    groupadd -r srbminer && \
+    useradd -r -g srbminer -d /opt/SRBMiner-Multi -s /usr/sbin/nologin srbminer && \
+    chown -R srbminer:srbminer /opt/SRBMiner-Multi && \
+    apt-get -y autoremove --purge curl && \
+    apt-get -y clean && \
+    rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 WORKDIR /opt/SRBMiner-Multi/
 COPY start_zergpool.sh .
@@ -34,6 +44,9 @@ RUN chmod +x start_zergpool.sh
 USER srbminer
 
 EXPOSE 80
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD ["/opt/SRBMiner-Multi/SRBMiner-MULTI", "--version"]
 
 ENTRYPOINT ["./start_zergpool.sh"]
 CMD ["--api-enable", "--api-port", "80", "--disable-auto-affinity", "--disable-gpu"]
