@@ -22,8 +22,9 @@ Primary instruction source: `.github/copilot-instructions.md` (canonical when it
 ## Shell and runtime constraints
 
 - `start_zergpool.sh` is a POSIX `sh` script with `set -eu`; keep it POSIX-compatible.
-- Port `80` is the expected HTTP/API port across Dockerfile and docs.
+- Port `8080` is the expected HTTP/API port across Dockerfile, docs, and checks.
 - The image runs as non-root `srbminer` by default.
+- The installed paths are `/opt/SRBMiner-Multi/SRBMiner-MULTI` and `/opt/SRBMiner-Multi/start_zergpool.sh`.
 
 ## Release/versioning
 
@@ -36,12 +37,15 @@ Primary instruction source: `.github/copilot-instructions.md` (canonical when it
 
 - SRBMiner-Multi version tags on GitHub use dots (e.g. `3.4.7`) but the tarball name uses hyphens (e.g. `SRBMiner-Multi-3-4-7-Linux.tar.gz`). The `tr '.' '-'` transformation in the Dockerfile handles this.
 - The default `WALLET_USER` is a placeholder — override it at runtime.
+- The entrypoint prepends `LTC:` and appends `.$(hostname)#Jumper` to `WALLET_USER`; it also logs wallet and password values. Treat plain startup as a network/pool run, not an offline smoke test.
+- Prefer `docker run --rm --entrypoint="" image ./SRBMiner-MULTI --version` for offline binary validation. `EXTRAS` is a space-separated flag string and is intentionally shell-expanded.
+- `EXPECTED_SHA256` should be supplied for release builds; an empty value disables checksum verification.
 - `.dockerignore` excludes `.github`, `build.sh`, and other dev files; changes there do not affect image build context.
 
 ## CI
 
 - `.github/workflows/docker-build.yml` runs on push and PR to `main`:
   - `validate` job: builds with `./build.sh build-only`, then runs `--version`, entrypoint-bypass validation, and `security-check.sh` against it. Never pushes.
-  - `docker` job (push events only, gated on `validate` passing): rebuilds, re-validates, then tags and pushes to Docker Hub, GHCR, and Quay.io, generates SLSA provenance attestation and SBOM, and creates a GitHub Release.
+  - `docker` job (push events only, gated on `validate` passing): rebuilds, re-validates, then tags and pushes to Docker Hub and GHCR, generates SLSA provenance attestation and SBOM, and creates a GitHub Release.
 - Snyk container scanning runs on push/PR to `main` and weekly via `snyk-container-analysis.yml`.
 - Dependabot monitors Docker base images and GitHub Actions versions.
