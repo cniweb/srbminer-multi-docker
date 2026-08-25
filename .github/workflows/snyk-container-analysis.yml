@@ -31,6 +31,7 @@ jobs:
     - name: Build a Docker image
       run: docker build -t cniweb/srbminer-multi .
     - name: Run Snyk to check Docker image for vulnerabilities
+      id: snyk
       # Snyk can be used to break the build when it detects vulnerabilities.
       # In this case we want to upload the issues to GitHub Code Scanning
       continue-on-error: true
@@ -44,6 +45,7 @@ jobs:
         image: cniweb/srbminer-multi
         args: --file=Dockerfile
     - name: Debug SARIF structure (before patching)
+      if: steps.snyk.outcome == 'success' && hashFiles('snyk.sarif') != ''
       run: |
         echo "=== SARIF file structure analysis ==="
         # Check if file exists and show basic info
@@ -76,6 +78,7 @@ jobs:
         jq -r 'paths(scalars) as $p | select(getpath($p) == "null" and ($p | last) == "security-severity") | "STRING NULL Path: " + ($p | join("."))' snyk.sarif || echo "No string 'null' security-severity found"
         
     - name: Patch SARIF file (replace null severity values)
+      if: steps.snyk.outcome == 'success' && hashFiles('snyk.sarif') != ''
       run: |
         echo "=== Patching SARIF file ==="
         # Fix the root cause: SARIF contains "security-severity": "null" (string) not null (JSON null)
@@ -107,6 +110,7 @@ jobs:
         ' snyk.sarif > snyk.sarif.tmp && mv snyk.sarif.tmp snyk.sarif
         
     - name: Debug SARIF structure (after patching)
+      if: steps.snyk.outcome == 'success' && hashFiles('snyk.sarif') != ''
       run: |
         echo "=== SARIF file after patching ==="
         # Check for any remaining null security-severity values
@@ -126,6 +130,7 @@ jobs:
         jq -r 'paths(scalars) as $p | select(getpath($p) == "null" and ($p | last) == "security-severity") | "REMAINING STRING NULL Path: " + ($p | join("."))' snyk.sarif || echo "No string 'null' security-severity found"
         
     - name: Validate SARIF file
+      if: steps.snyk.outcome == 'success' && hashFiles('snyk.sarif') != ''
       run: |
         echo "=== Final validation ==="
         # Validate that the SARIF file is valid JSON
@@ -167,6 +172,7 @@ jobs:
         security_severity_count=$(jq '[.. | objects | select(has("security-severity"))] | length' snyk.sarif)
         echo "INFO: Found $security_severity_count total security-severity properties"
     - name: Upload result to GitHub Code Scanning
+      if: steps.snyk.outcome == 'success' && hashFiles('snyk.sarif') != ''
       uses: github/codeql-action/upload-sarif@5595ccaf912efad79be6eef63a5619ff05969be3 # v4
       with:
         sarif_file: snyk.sarif
