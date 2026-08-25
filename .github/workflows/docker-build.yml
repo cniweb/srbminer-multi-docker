@@ -168,6 +168,7 @@ jobs:
               per_page: 50,
             });
 
+            const existing = releases.find(r => r.tag_name === tag);
             const previous = releases.find(r => !r.draft && !r.prerelease && r.tag_name !== tag);
 
             let name = `SRBMiner-Multi Docker v${version}`;
@@ -192,13 +193,27 @@ jobs:
               }
             }
 
-            await github.rest.repos.createRelease({
-              owner,
-              repo,
-              tag_name: tag,
-              target_commitish: context.sha,
-              name,
-              body,
-              draft: false,
-              prerelease: false,
-            });
+            if (existing) {
+              await github.rest.repos.updateRelease({
+                owner,
+                repo,
+                release_id: existing.id,
+                tag_name: tag,
+                target_commitish: context.sha,
+                name,
+                body,
+                draft: false,
+                prerelease: false,
+              });
+            } else {
+              await github.rest.repos.createRelease({
+                owner,
+                repo,
+                tag_name: tag,
+                target_commitish: context.sha,
+                name,
+                body,
+                draft: false,
+                prerelease: false,
+              });
+            }
