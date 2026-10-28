@@ -194,17 +194,7 @@ jobs:
             }
 
             if (existing) {
-              await github.rest.repos.updateRelease({
-                owner,
-                repo,
-                release_id: existing.id,
-                tag_name: tag,
-                target_commitish: context.sha,
-                name,
-                body,
-                draft: false,
-                prerelease: false,
-              });
+              core.info(`Release ${tag} already exists; leaving the published release unchanged.`);
             } else {
               await github.rest.repos.createRelease({
                 owner,
