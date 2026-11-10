@@ -194,7 +194,7 @@ jobs:
             }
 
             if (existing) {
-              console.log(`Release ${tag} already exists; leaving it unchanged.`);
+              core.info(`Release ${tag} already exists; leaving the published release unchanged.`);
             } else {
               await github.rest.repos.createRelease({
                 owner,
