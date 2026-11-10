@@ -194,17 +194,24 @@ jobs:
             }
 
             if (existing) {
-              await github.rest.repos.updateRelease({
-                owner,
-                repo,
-                release_id: existing.id,
-                tag_name: tag,
-                target_commitish: context.sha,
-                name,
-                body,
-                draft: false,
-                prerelease: false,
-              });
+              try {
+                await github.rest.repos.updateRelease({
+                  owner,
+                  repo,
+                  release_id: existing.id,
+                  tag_name: tag,
+                  target_commitish: context.sha,
+                  name,
+                  body,
+                  draft: false,
+                  prerelease: false,
+                });
+              } catch (error) {
+                if (error.status !== 403 || !String(error.message || "").startsWith("Resource not accessible by integration")) {
+                  throw error;
+                }
+                core.warning(`Could not update existing release ${tag}; leaving its metadata unchanged.`);
+              }
             } else {
               await github.rest.repos.createRelease({
                 owner,
